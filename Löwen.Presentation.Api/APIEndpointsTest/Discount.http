@@ -1,0 +1,51 @@
+@Löwen.Api_HostAddress = https://localhost:7197/api/Discount
+@token = your_jwt_token_here
+
+### Add discount
+POST {{Löwen.Api_HostAddress}}/add-discount
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "SUMMER02",
+  "discountType": 1,
+  "discountValue": 20,
+  "startDate": "2025-06-01T00:00:00Z",
+  "endDate": "2025-11-01T00:00:00Z",
+  "isActive": true
+}
+
+###
+
+### Update discount
+PUT {{Löwen.Api_HostAddress}}/update-discount
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "id": "3112e1f0-8d5e-48c3-9bc0-1a7d743331ab",
+  "name": "SUMMER2026",
+  "discountType": 1,
+  "discountValue": 20,
+  "startDate": "2025-06-01T00:00:00Z",
+  "endDate": "2025-09-01T00:00:00Z",
+  "isActive": true
+}
+
+###
+
+### Remove discount
+DELETE {{Löwen.Api_HostAddress}}/remove-discount/0ceab03a-2e6d-41bc-bcb3-ab6514811e23
+Authorization: Bearer {{token}}
+
+###
+
+### Get discount by ID
+GET {{Löwen.Api_HostAddress}}/get-discount-by-id/f7ae7f7f-0d41-4fe3-9931-6cc27aaf49db
+Authorization: Bearer {{token}}
+
+###
+
+### Get all discounts (paged)
+GET {{Löwen.Api_HostAddress}}/get-all-discounts-paged/1,10
+Authorization: Bearer {{token}}

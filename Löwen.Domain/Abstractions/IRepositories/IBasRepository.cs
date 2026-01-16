@@ -1,0 +1,13 @@
+﻿
+using Löwen.Domain.ErrorHandleClasses;
+using Löwen.Domain.Pagination;
+
+namespace IslamicFace.Domain.Abstractions.IRepositories;
+
+public interface IBasRepository<TEntity, IdType> where TEntity : class
+{
+    Task<TEntity?> GetByIdAsync(IdType id, CancellationToken ct);
+    Task<Result<TEntity>> AddAsync(TEntity entity, CancellationToken ct);
+    Task<Result>  UpdateAsync(TEntity entity, CancellationToken ct);
+    Task<Result>  DeleteAsync(TEntity entity, CancellationToken ct);
+}

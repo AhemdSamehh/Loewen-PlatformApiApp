@@ -1,0 +1,40 @@
+﻿using Löwen.Application.Messaging.ICommand;
+using Löwen.Domain.Abstractions.IServices.IAppUserServices;
+using Löwen.Domain.Abstractions.IServices.IEmailServices;
+using Löwen.Domain.Enums;
+
+namespace Löwen.Application.Features.AuthFeature.Commands.RegisterCommand;
+
+public class RegisterCommandHandler(IEmailService emailService, IAppUserService userService) : ICommandHandler<RegisterCommand>
+{
+    public async Task<Result> Handle(RegisterCommand command, CancellationToken ct)
+    {
+        var checkEmail = await userService.IsEmailNotTakenAsync(command.Email);
+        if (checkEmail.IsFailure) return Result.Failure(checkEmail.Errors);
+
+        var checkUserName = await userService.IsUserNameNotTakenAsync(command.UserName);
+        if (checkUserName.IsFailure) return Result.Failure(checkUserName.Errors);
+
+        var registerResult = await userService.RegisterAsync(new RegisterUserDto(command.Email, command.UserName, command.Password), ct);
+        if (registerResult.IsFailure) return Result.Failure(registerResult.Errors);
+
+        var roleResult = await userService.AssignUserToRoleAsync(registerResult.Value, UserRole.User);
+        if (roleResult.IsFailure)
+        {
+            await userService.RemoveUserAsync(registerResult.Value.ToString());
+            return Result.Failure(roleResult.Errors);
+        }
+
+        var confirmationLink = await userService.GenerateEmailConfirmationTokenAsync(command.Email);
+        if (confirmationLink.IsFailure) return Result.Failure(confirmationLink.Errors);
+
+        var emailResult = await emailService.SendVerificationEmailAsync(command.Email, confirmationLink.Value, ct);
+        if (emailResult.IsFailure)
+            return Result.Failure(
+                new Error("there are Confirm Email Errors", string.Join(", ", emailResult.Errors), ErrorType.ConfirmEmailError));
+
+       
+
+        return Result.Success();
+    }
+}

@@ -1,0 +1,137 @@
+﻿global using FluentValidation;
+global using Löwen.Application.Behaviors;
+//admin
+global using Löwen.Application.Features.AdminFeature.Queries.GetProducts;
+global using Löwen.Application.Features.AdminFeature.Queries.GetProductsByIdOrName;
+global using Löwen.Application.Features.AdminFeature.Commands.Category.AddCategory;
+global using Löwen.Application.Features.AdminFeature.Commands.Category.RemoveCategory;
+global using Löwen.Application.Features.AdminFeature.Commands.Category.UpdateCategory;
+global using Löwen.Application.Features.AdminFeature.Commands.Product.AddProduct;
+global using Löwen.Application.Features.AdminFeature.Commands.Product.AddProductImages;
+global using Löwen.Application.Features.AdminFeature.Commands.Product.AddProductVariant;
+global using Löwen.Application.Features.AdminFeature.Commands.Product.DeleteProductImages;
+global using Löwen.Application.Features.AdminFeature.Commands.Product.RemoveProduct;
+global using Löwen.Application.Features.AdminFeature.Commands.Product.RemoveProductVariant;
+global using Löwen.Application.Features.AdminFeature.Commands.Product.UpdateProduct;
+global using Löwen.Application.Features.AdminFeature.Commands.Product.UpdateProductVariant;
+global using Löwen.Application.Features.AdminFeature.Queries.GetUsers;
+global using Löwen.Application.Features.AdminFeatures.Commands.ActivateMarkedAsDeleted;
+global using Löwen.Application.Features.AdminFeatures.Commands.MarkAsDeleted;
+//Auth
+global using Löwen.Application.Features.AuthFeature.Commands.ConfirmEmailCommand;
+global using Löwen.Application.Features.AuthFeature.Commands.LoginCommand;
+global using Löwen.Application.Features.AuthFeature.Commands.RegisterCommand;
+global using Löwen.Application.Features.AuthFeature.Commands.ResetPasswordCommand;
+//Cart
+global using Löwen.Application.Features.CartFeature.Commands.AddToCart;
+global using Löwen.Application.Features.CartFeature.Commands.RemoveFromCartItem;
+global using Löwen.Application.Features.CartFeature.Commands.UpdateCartItemQuantity;
+global using Löwen.Application.Features.CartFeature.Queries.GetCartByUser;
+//Coupon
+global using Löwen.Application.Features.CouponFeature.Commands.AddCoupon;
+global using Löwen.Application.Features.CouponFeature.Commands.ApplyCouponToOrder;
+global using Löwen.Application.Features.CouponFeature.Commands.RemoveCoupon;
+global using Löwen.Application.Features.CouponFeature.Commands.RemoveCouponFromOrder;
+global using Löwen.Application.Features.CouponFeature.Commands.UpdateCoupon;
+global using Löwen.Application.Features.CouponFeature.Queries;
+global using Löwen.Application.Features.CouponFeature.Queries.GetAllCoupons;
+global using Löwen.Application.Features.CouponFeature.Queries.GetCouponByCode;
+global using Löwen.Application.Features.CouponFeature.Queries.GetCouponById;
+global using Löwen.Application.Features.OrderFeature.Commands.AssignedOrdersToDelivery;
+//root admin
+global using Löwen.Application.Features.RootAdminFeatures.Commands.ActivateMarkedAsDeleted;
+global using Löwen.Application.Features.RootAdminFeatures.Commands.AddAdmin;
+global using Löwen.Application.Features.RootAdminFeatures.Commands.AssignRole;
+global using Löwen.Application.Features.RootAdminFeatures.Commands.MarkAsDeleted;
+global using Löwen.Application.Features.RootAdminFeatures.Commands.RemoveAdminCommand;
+global using Löwen.Application.Features.RootAdminFeatures.Commands.RemoveRoleFromUser;
+global using Löwen.Application.Features.RootAdminFeatures.Queries.GetAdminByEmail;
+global using Löwen.Application.Features.RootAdminFeatures.Queries.GetAdminById;
+global using Löwen.Application.Features.RootAdminFeatures.Queries.GetAdmins;
+//Users
+global using Löwen.Application.Features.UserFeature.Commands.DeleteUserImage;
+global using Löwen.Application.Features.UserFeature.Commands.ProductReviewOper.AddProductReview;
+global using Löwen.Application.Features.UserFeature.Commands.ProductReviewOper.UpdateProductReview;
+global using Löwen.Application.Features.UserFeature.Commands.WishlistOper.RemoveProductReview;
+global using Löwen.Application.Features.UserFeature.Queries.GetOrdersForUser;
+global using Löwen.Application.Features.UserFeature.Queries.GetUserWishList;
+global using Löwen.Application.Features.SendEmailFeature.EmailConfirmationTokenCommand;
+global using Löwen.Application.Features.UploadFeature.UpdateProfileImageCommand;
+global using Löwen.Application.Features.UserFeature.Commands.Love.AddLove;
+global using Löwen.Application.Features.UserFeature.Commands.Love.RemoveLove;
+global using Löwen.Application.Features.UserFeature.Commands.UserInfoOper.ChangePassword;
+global using Löwen.Application.Features.UserFeature.Commands.UserInfoOper.UpdateUserInfo;
+global using Löwen.Application.Features.UserFeature.Commands.WishlistOper.AddToWishlist;
+global using Löwen.Application.Features.UserFeature.Commands.WishlistOper.RemoveFromWishlist;
+global using Löwen.Application.Features.UserFeature.Queries.GetUserByEmail;
+global using Löwen.Application.Features.UserFeature.Queries.GetUserById;
+global using Löwen.Domain.ConfigurationClasses.ApiSettings;
+global using Löwen.Domain.ConfigurationClasses.JWT;
+global using Löwen.Domain.ConfigurationClasses.Pagination;
+global using Löwen.Domain.ConfigurationClasses.StaticFilesHelpersClasses;
+global using Löwen.Domain.Enums;
+global using Löwen.Domain.ErrorHandleClasses;
+global using Löwen.Domain.Layer_Dtos.Delivery;
+global using Löwen.Domain.Layer_Dtos.Product;
+global using Löwen.Domain.Pagination;
+global using Löwen.Infrastructure.EFCore.Context;
+global using Löwen.Infrastructure.EFCore.IdentityUser;
+global using Löwen.Infrastructure.Services.EmailServices;
+global using Löwen.Infrastructure.Services.IdentityServices;
+global using Löwen.Presentation.Api.Controllers.v1.AdminController.Models.CategoryModels;
+global using Löwen.Presentation.Api.Controllers.v1.AdminController.Models.DeliveryOrder;
+global using Löwen.Presentation.Api.Controllers.v1.AdminController.Models.ProductModels;
+global using Löwen.Presentation.Api.Controllers.v1.CartController.Models;
+global using Löwen.Presentation.Api.Controllers.v1.CouponController.Models;
+global using Löwen.Presentation.Api.Controllers.v1.RootAdminController.Models;
+global using Löwen.Presentation.Api.Controllers.v1.UsersController.Models;
+global using Löwen.Presentation.API.Controllers.v1.AuthController.Models;
+global using Löwen.Presentation.API.Extensions;
+global using Löwen.Presentation.API.Services;
+global using MediatR;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.Versioning;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.IdentityModel.Tokens;
+global using System.Security.Claims;
+global using System.Text;
+
+
+//Discount
+
+global using Löwen.Application.Features.DiscountFeature.Commands.AddDiscount;
+global using Löwen.Application.Features.DiscountFeature.Commands.DeleteDiscount;
+global using Löwen.Application.Features.DiscountFeature.Commands.UpdateDiscount;
+global using Löwen.Application.Features.DiscountFeature.Queries.GetAll;
+global using Löwen.Application.Features.DiscountFeature.Queries.GetById;
+global using Löwen.Application.Features.DiscountFeature.Queries.Response;
+global using Löwen.Presentation.Api.Controllers.v1.DiscountController.Models;
+
+//order
+
+global using Löwen.Application.Features.OrderFeature.Commands.AddOrder.AddOrder;
+global using Löwen.Application.Features.OrderFeature.Commands.UpdateOrderItem.UpdateOrderItem;
+global using Löwen.Application.Features.OrderFeature.Queries.GetAllOrders;
+global using Löwen.Application.Features.OrderFeature.Queries.GetOrderDetails;
+global using Löwen.Application.Features.OrderFeature.Queries.OrderDetailsResponse;
+global using Löwen.Presentation.Api.Controllers.v1.OrderController.Models;
+
+//Payment
+
+global using Löwen.Application.Features.PaymentFeature.AddPayment;
+global using Löwen.Application.Features.PaymentFeature.UpdatePaymentStatus;
+global using Löwen.Presentation.Api.Controllers.v1.PaymentController.Models;
+
+//Product
+
+global using Löwen.Application.Features.ProductFeature.Queries;
+global using Löwen.Application.Features.ProductFeature.Queries.GetAllMostLovedProductsPaged;
+global using Löwen.Application.Features.ProductFeature.Queries.GetAllProductPaged;
+global using Löwen.Application.Features.ProductFeature.Queries.GetAllProductPagedByGender;
+global using Löwen.Application.Features.ProductFeature.Queries.GetAllProductPagedByName;
+global using Löwen.Application.Features.ProductFeature.Queries.GetAllProductReviewsPaged;
+global using Löwen.Application.Features.ProductFeature.Queries.GetProductById;
+global using Löwen.Application.Features.ProductFeature.Queries.GetProductsByCategoryPaged;
